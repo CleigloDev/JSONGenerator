@@ -1,0 +1,15 @@
+[{
+            "fieldID": "Prova",
+            "type": "input",
+            "columsType": "text",
+            "visible": false,
+            "tableField": false,
+            "inputType": "int"
+        },{
+            "fieldID": "Prova2",
+            "type": "select",
+            "columsType": "text",
+            "visible": true,
+            "tableField": true,
+            "inputType": "string"
+        }]

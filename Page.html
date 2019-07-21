@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<script></script>
+<head>
+
+</head>
+
+<body>
+    <img src="LogoJSONGenerator.png">
+    <p>Esempio contenuto file</p>
+    <p>[{</p>
+    <p>"fieldID": "Prova",</p>
+    <p>"type": "input",</p>
+    <p>"columsType": "text",</p>
+    <p>"visible": false,</p>
+    <p>"tableField": false,</p>
+    <p>"inputType": "int"</p>
+    <p>}]</p>
+    <p>Carica un file</p>
+    <input type="file" id="TextUploader">
+    <script type="text/javascript" src="JSONGenerator.js"></script>
+    <script>
+        var uploader = document.getElementById("TextUploader");
+        uploader.addEventListener('change', () => {
+            const files = uploader.files
+
+            if (files.length) {
+                const reader = new FileReader()
+                reader.addEventListener('load', (e) => {
+                    uploader.parentNode.removeChild(uploader)
+                    js.downloadGenetatedJSON(reader.result);
+                })
+                reader.readAsText(files[0])
+            }
+        });
+    </script>
+</body>

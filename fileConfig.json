@@ -1,0 +1,166 @@
+{
+	"Entities":{
+		"PackageOnly":{
+			"fields":[
+				{
+				"IDForDelete": true, // id da considerare per la delete potrebbero essere più di uno, al momento non sono gestiti per upload e delete, meglio usarne solo 1
+				"fieldID":"ID" , // nome del campo
+				"tableField": false, // se deve essere un campo presente sulla tabella o no
+				"type": "input" , // tipo di control per insert/update
+				"inputType": "string", // tipo di dato da inserire, permette di cambiare la function associata con le varie regexp, da inserire solo per type = "input"
+				"visible": false , // visibilità per tabelle con troppe colonne, se tableField è false deve essere valorizzato a false
+				"dependecy": "" , // eventuale dipendenza per il campo, per settare il modello per la select, da valorizzare solo per le select
+				"dependecyID": "" , // campo per Key per select
+				"dependecyText": "" , // campo per text per select
+				"formatter": "formatterName" , // nome formatter, al momento valido solo per campi di tipo icon
+				"columsType": "text", // tipo di colonna 
+				"checkStep": [], // campo da controllare per eventuali controlli incrociati tra campi
+				"checkType": [], // tipo di controllo per il campo precedente, da controllare di pari passo con l'i-esimo campo di checkStep 
+				"mandatory": true, // campo obbligatorio o no
+				"editable": true // campo editabile o no, solo language è non editabile
+				},
+				{
+				"IDForDelete": false,
+				"fieldID":"description" ,
+				"tableField": true,
+				"type": "input" ,
+				"inputType": "string",
+				"visible": true ,
+				"dependecy": "" ,
+				"dependecyID": "" ,
+				"dependecyText": "" ,
+				"formatter": "formatterName" ,
+				"columsType": "text",
+				"checkStep": [], 
+				"checkType": [],
+				"mandatory": true,
+				"editable": true
+				},
+				{
+				"IDForDelete": false,
+				"fieldID":"isSubmeasure" ,
+				"tableField": true,
+				"type": "switch" , // switch indica il tipo di campo nella form
+				"visible": true ,
+				"dependecy": "" ,
+				"dependecyID": "" ,
+				"dependecyText": "" ,
+				"formatter": "formatterName" , 
+				"columsType": "icon", // tipo di colonna per la tabella, applica un formatter particolare al momento
+				"checkStep": [], 
+				"checkType": [],
+				"mandatory": true,
+				"editable": true
+				},
+				{
+				"IDForDelete": false, 
+				"fieldID":"packageType_description" ,
+				"tableField": true,
+				"type": "select" ,
+				"fieldForIDselect": "packageType_ID", //  indica la property del modello view da prendere per la selectKey corrispondente(oViewModel.getProperty(/fieldForIDselect)), 
+					presente solo in type = "select"
+				"visible": false ,
+				"dependecy": "PackageType" , // dipendenza
+				"dependecyID": "ID" , // key per la tabella (in questo caso PackageType)
+				"dependecyText": "description" , // description per la key 
+				"formatter": "formatterName" ,
+				"columsType": "text",
+				"checkStep": [], 
+				"checkType": [],
+				"mandatory": true,
+				"editable": true
+				},
+				{
+				"IDForDelete": false,
+				"fieldID":"language" ,
+				"tableField": true,
+				"type": "input" ,
+				"inputType": "string",
+				"visible": true ,
+				"dependecy": "" ,
+				"dependecyID": "" ,
+				"dependecyText": "" ,
+				"formatter": "formatterName" ,
+				"columsType": "text",
+				"checkStep": [], 
+				"checkType": [],
+				"mandatory": true,
+				"editable": false
+				},
+				{
+				"IDForDelete": false,
+				"fieldID": "isDangerous",
+				"tableField": true,
+				"type": "select",
+				"visible": false,
+				"fieldForIDselect": "isDangerous",
+				"dependecy": "CP_WasteType",
+				"dependecyID": "codeBool",
+				"dependecyText": "codeBool",
+				"functionName": "onChangeStateDinamically", // nome metodo cambiamenti dinamici stile rodolfo
+				"formatter": "_formatIcon",
+				"formatterColor": "_formatIconColor",
+				"columsType": "icon",
+				"checkStep": [],
+				"checkType": [],
+				"mandatory": true,
+				"editable": true,
+				"changeStatusOf":[{	// proprietà necessaria per lanciare i cambiamenti dinamici alla rodolfo per select/input(unici implementati al momento)
+					"nameField": "codeDangerousString",
+					"typeChange": "setVisible", // tipo di cambiamento effettuabile in questo caso( rende visibile o non visibili determinati componenti)
+					"valueToChange": true,  // valore da inserire nel typeChange se il campo condition è rispettato
+					"elseCase": false,	// valore da inserire nel typeChange se il campo condition non è rispettato
+					"condition": "true",	// condizione da verificare
+					"fieldCondition": "codeBool" // campo da cui il valore per effettuare il confronto, il campo deve essere presente nella calculation view della select di riferimento
+													in questo caso è "CP_WasteType"
+				},{
+					"nameField": "codeHazardStatement",
+					"typeChange": "setVisible",
+					"valueToChange": true,
+					"elseCase": false,
+					"condition": "true",
+					"fieldCondition": "codeBool"
+				},{
+					"nameField": "waste_description_tl", // casistica di riempimento esclusivo di un campo di tipo input in base ad una selezione effettuata.
+														// questo campo rappresenta la proprietà del modello view a cui è bindato il value dell'input
+					"fieldSetValue": "CER_description_tl" // campo di cui usare il valore per riempire l'input, questo campo deve essere necessariamente presente all'interno della collezione
+														// di riferimento per la select( in questo caso è "CP_WasteType")
+				}],
+				"setDefaultVisible":[{ // proprietà necessaria per impostare la visibilità di default per altri campi in base a determinati valori che sono preselezionati(usata solo nel caso di update)
+										// esempio: update CerPlant, il cer selezionato è non pericoloso, di conseguenza tutti i campi relativi alla sua pericolosità vanno fatti sparire
+					"fieldName":"codeDangerousString", // "fieldID" corrispondente al control che si vuole far sparire
+					"conditionValue": "true" // valore da controllare per determinare se il control di riferimento deve essere visibile o no,
+											// se il valore che arriva dall'oggetto selezionato è corrispondente al "conditionValue" il control sarà visibile altrimenti no
+				},{
+					"fieldName":"codeHazardStatement",
+					"conditionValue": "true"
+				}]
+			}],
+			"associable": false, // se ha delle associazioni o no
+			"dependecies":[{ // cv da considerare come dipendenze per le select da implementare nel form, possono essere più di una
+				"name":"CerCountry", // nome della calculation view
+				"filters":[ // eventuali filtri per la calculation view
+					{
+					"key":"country_ID", // chiave per il filtro (la property da usare del modello di riferimento)
+					"where":"Component", // da dove deve essere preso (component o view model)
+					"modelName":"User" // nome del modello da utilizzare
+				}],
+				"fieldToTranslate":["CER_description_tl", "country_description_tl"] // campi da tradurre per la calculation view, 
+						// dovrebbero corrispondere solamente ai vari campi testi da mostrare all'utente per le select
+			}, 
+			"EntityDescription":"Package", // descrizione per la lista
+			"EntityNameForNavigation": "PackageOnly", // nome usato per la navigazione e per la chiamata alla cv
+			"fieldsFilter": [{ // filtri per la tabella
+				"filterName":"waste_description_tl", // nome del campo fisico sulla calculation view da filtrare
+				"type": "string", // tipo, al momento sono gestiti solo casi stringa e date
+				"isFilter": true // se deve essere visibile come filtro, da valutare di disabilitare tutti i filtri relativi alle spunte verdi o rosse
+			}],
+			"fieldsName":["description", "tare", "maxVolume", "maxSurface", "isSubmeasure", "packageType_description", "language"],
+			// campi usati per la tabella di dettaglio
+			"fieldsNew":["description", "tare", "maxVolume", "maxSurface", "isSubmeasure", "packageType_ID", "packageType_description", "language"],
+			// campi usati per insert e update del record, solo i campi del body vanno inseriti qui
+			"translableFields": ["package_description_tl", "packageType_description"]
+			// campi da tradurre sulla calculation view principale, quella che verrà inserita nella tabella
+		}
+	}
+}
